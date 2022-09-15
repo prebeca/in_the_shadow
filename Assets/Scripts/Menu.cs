@@ -10,12 +10,14 @@ public class Menu : MonoBehaviour
     public List<GameObject> levels = new List<GameObject>();
     public GameObject optionsObj = null;
     public GameObject menuObj = null;
+    public GameObject gameZone = null;
 
     public GameObject nextLevelBtn = null;
     public GameObject prevLevelBtn = null;
     public GameObject homeBtn = null;
 
     int targetLevel = -1;
+    bool toLevel = false;
 
     Vector3 targetPos;
 
@@ -24,12 +26,6 @@ public class Menu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Application.targetFrameRate = 60;
-
-        Screen.fullScreenMode = FullScreenMode.ExclusiveFullScreen;
-
-        // Screen.SetResolution(800, 600, FullScreenMode.Windowed, 60);
-
         float b = 1f;
         float speed = Random.Range(0.25f, 0.75f);
         for (int i = 0; i < logoParts.Count; ++i, b *= -1f, speed *= b)
@@ -42,6 +38,11 @@ public class Menu : MonoBehaviour
         if (targetPos != cam.transform.position)
         {
             cam.transform.position = Vector3.Lerp(cam.transform.position, targetPos, cameraSpeed * Time.deltaTime);
+            if (toLevel && cam.transform.position.z > 4)
+            {
+                toGameZone();
+                toLevel = false;
+            }
         }
     }
 
@@ -94,4 +95,24 @@ public class Menu : MonoBehaviour
         nextLevelBtn.SetActive(false);
         homeBtn.SetActive(false);
     }
+
+    public void startLevel()
+    {
+        prevLevelBtn.SetActive(false);
+        nextLevelBtn.SetActive(false);
+        homeBtn.SetActive(false);
+
+        targetPos = cam.transform.position;
+        targetPos.z = 5;
+        toLevel = true;
+    }
+
+    public void toGameZone()
+    {
+        cam.transform.position = gameZone.transform.position;
+        cam.transform.rotation = gameZone.transform.rotation;
+
+        targetPos = gameZone.transform.position;
+    }
+
 }

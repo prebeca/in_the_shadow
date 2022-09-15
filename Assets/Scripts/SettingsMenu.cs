@@ -16,10 +16,21 @@ public class SettingsMenu : MonoBehaviour
 
     List<FullScreenMode> modes = new List<FullScreenMode>();
     public TMP_Dropdown modeDropdown;
-
+    public TMP_Dropdown qualityDropdown;
+    public TMP_Dropdown vSyncDropdown;
+    
     // Start is called before the first frame update
     void Start()
     {
+        // quality
+        setVSync(PlayerPrefs.GetInt("vsync", QualitySettings.GetQualityLevel()));
+        qualityDropdown.value = QualitySettings.GetQualityLevel();
+        qualityDropdown.RefreshShownValue();
+        
+        // vsync
+        vSyncDropdown.value = QualitySettings.vSyncCount;
+        vSyncDropdown.RefreshShownValue();
+
         // volume
         float currentVolume = PlayerPrefs.GetFloat("volume", 0);
         volumeSlider.value = currentVolume;
@@ -96,5 +107,16 @@ public class SettingsMenu : MonoBehaviour
     {
         audioMixer.SetFloat("volume", volume);
         PlayerPrefs.SetFloat("volume", volume);
+    }
+
+    public void setQuality(int qualityIndex)
+    {
+        QualitySettings.SetQualityLevel(qualityIndex, false);
+    }
+
+    public void setVSync(int vSyncIndex)
+    {
+        QualitySettings.vSyncCount = vSyncIndex;
+        PlayerPrefs.SetInt("vsync", QualitySettings.vSyncCount);
     }
 }
