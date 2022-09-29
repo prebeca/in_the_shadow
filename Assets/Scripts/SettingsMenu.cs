@@ -8,25 +8,32 @@ using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour
 {
+    public Player player = null;
+    public BetterMenu menu = null;
+
+    // Sound
     public AudioMixer audioMixer;
     public Slider volumeSlider;
 
-    Resolution[] resolutions;
+    // Resolution
+    List<Resolution> resolutions;
     public TMP_Dropdown resolutionDropdown;
 
+    // Screen resolution
     List<FullScreenMode> modes = new List<FullScreenMode>();
     public TMP_Dropdown modeDropdown;
+
+    // Quality
     public TMP_Dropdown qualityDropdown;
     public TMP_Dropdown vSyncDropdown;
-    
-    // Start is called before the first frame update
+
     void Start()
     {
         // quality
         setVSync(PlayerPrefs.GetInt("vsync", QualitySettings.GetQualityLevel()));
         qualityDropdown.value = QualitySettings.GetQualityLevel();
         qualityDropdown.RefreshShownValue();
-        
+
         // vsync
         vSyncDropdown.value = QualitySettings.vSyncCount;
         vSyncDropdown.RefreshShownValue();
@@ -66,7 +73,8 @@ public class SettingsMenu : MonoBehaviour
 
         Screen.SetResolution(savedResolution.width, savedResolution.height, Screen.fullScreenMode, savedResolution.refreshRate);
 
-        resolutions = Screen.resolutions;
+        resolutions = new List<Resolution>(Screen.resolutions);
+        resolutions.Reverse();
 
         resolutionDropdown.ClearOptions();
 
@@ -74,7 +82,7 @@ public class SettingsMenu : MonoBehaviour
 
         int currentResIndex = 0;
 
-        for (int i = 0; i < resolutions.Length; ++i)
+        for (int i = 0; i < resolutions.Count; ++i)
         {
             string option = resolutions[i].width + "*" + resolutions[i].height + " " + resolutions[i].refreshRate + "Hz";
             options.Add(option);
@@ -118,5 +126,10 @@ public class SettingsMenu : MonoBehaviour
     {
         QualitySettings.vSyncCount = vSyncIndex;
         PlayerPrefs.SetInt("vsync", QualitySettings.vSyncCount);
+    }
+
+    public void toMenu()
+    {
+        player.moveTo(menu.transform.position);
     }
 }
