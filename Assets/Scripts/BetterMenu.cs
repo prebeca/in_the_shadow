@@ -23,17 +23,17 @@ public class BetterMenu : MonoBehaviour
 
     void unlockLevels(bool isTesting = false)
     {
-        int maxLevel = PlayerPrefs.GetInt("LevelUnlock");
-        if (isTesting)
-            maxLevel = levels.Count;
-        for (int i = 1; i < maxLevel; ++i)
+        int maxLevel = levels.Count;
+        if (!isTesting)
+            maxLevel = PlayerPrefs.GetInt("LevelUnlock");
+        for (int i = 1; i < maxLevel && i < levels.Count; ++i)
             levels[i].setUnlock(false);
     }
 
     void lockLevels(bool isTesting = false)
     {
-        int maxLevel = levels.Count;
-        for (int i = 1; i < maxLevel; ++i)
+        int maxLevel = PlayerPrefs.GetInt("LevelUnlock");
+        for (int i = maxLevel; i < levels.Count; ++i)
             levels[i].setLocked();
     }
 
@@ -51,7 +51,6 @@ public class BetterMenu : MonoBehaviour
 
     public void startPlaying()
     {
-        lockLevels();
         unlockLevels();
         lvlChoice.currentIndex = 0;
         lvlChoice.moveTo(PlayerPrefs.GetInt("LevelUnlock") - 1);
@@ -60,6 +59,7 @@ public class BetterMenu : MonoBehaviour
     public void startPlayTesting()
     {
         unlockLevels(true);
+        lvlChoice.currentIndex = 0;
         lvlChoice.moveTo(0);
     }
 

@@ -25,6 +25,8 @@ public class LevelChoice : MonoBehaviour
         homeBtn.SetActive(currentIndex >= 0);
         prevLevelBtn.SetActive(currentIndex > 0);
         nextLevelBtn.SetActive(currentIndex >= 0 && currentIndex < levels.Count - 1 && !levels[currentIndex + 1].islocked);
+        if (currentIndex == -1)
+            lockLevels();
     }
 
     public void startLevel()
@@ -72,6 +74,13 @@ public class LevelChoice : MonoBehaviour
     public Level getCurrentLvl()
     {
         return (levels[currentIndex]);
+    }
+
+    public void lockLevels(bool isTesting = false)
+    {
+        int maxLevel = PlayerPrefs.GetInt("LevelUnlock");
+        for (int i = maxLevel; i < levels.Count; ++i)
+            levels[i].setLocked();
     }
 
     public void toMenu()
