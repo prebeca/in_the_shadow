@@ -44,6 +44,7 @@ public class LevelChoice : MonoBehaviour
 
     public void winLevel()
     {
+        gameController.isPlaying = false;
         if (currentIndex + 1 < levels.Count && levels[currentIndex + 1].islocked)
         {
             PlayerPrefs.SetInt("LevelUnlock", PlayerPrefs.GetInt("LevelUnlock") + 1);
@@ -52,9 +53,15 @@ public class LevelChoice : MonoBehaviour
         player.GetComponent<Animator>().SetTrigger("ToMenu");
     }
 
+    public void looseLevel()
+    {
+        gameController.isPlaying = false;
+        player.GetComponent<Animator>().SetTrigger("ToMenu");
+    }
+
     public void moveTo(int i)
     {
-        if (i >= 0 && i < levels.Count)
+        if (i >= 0 && i < levels.Count && !levels[i].islocked)
         {
             player.moveTo(levels[i].transform.position);
             currentIndex = i;

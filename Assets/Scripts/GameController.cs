@@ -11,8 +11,10 @@ public class GameController : MonoBehaviour
 
     [SerializeField] int RotationSpeed = 1;
 
-    bool isPlaying = false;
-    bool isPaused = false;
+    public GameObject reStartBtn = null;
+    public GameObject quitBtn = null;
+
+    public bool isPlaying = false;
     bool isSnapping = false;
     public int snappingSpeed = 1;
 
@@ -23,18 +25,20 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isPlaying)
+            return;
         if (isSnapping)
         {
             objectHolder.transform.localRotation = Quaternion.Lerp(objectHolder.transform.localRotation, Quaternion.Euler(currentLevel.correctRotation), snappingSpeed * Time.deltaTime);
             if (Quaternion.Angle(objectHolder.transform.localRotation, Quaternion.Euler(currentLevel.correctRotation)) == 0)
             {
+                isPlaying = false;
                 isSnapping = false;
                 // call end level menu
                 lvlChoice.winLevel();
             }
-        }
-        if (!isPlaying || isPaused)
             return;
+        }
         if (isCorrectPosition())
         {
             // end level
@@ -42,7 +46,8 @@ public class GameController : MonoBehaviour
                 timer -= Time.deltaTime;
             else
             {
-                isPlaying = false;
+                reStartBtn.SetActive(false);
+                quitBtn.SetActive(false);
                 isSnapping = true;
             }
         }
@@ -59,6 +64,8 @@ public class GameController : MonoBehaviour
 
     public void startLevel(Level level)
     {
+        reStartBtn.SetActive(true);
+        quitBtn.SetActive(true);
         objectHolder.localRotation = new Quaternion();
         if (objectHolder.childCount > 0)
             Destroy(objectHolder.GetChild(objectHolder.childCount - 1).gameObject);
@@ -70,6 +77,11 @@ public class GameController : MonoBehaviour
 
         objectHolder.localRotation = Quaternion.Euler(currentLevel.rotation);
         isPlaying = true;
+    }
+
+    public void reStartLevel()
+    {
+        objectHolder.localRotation = Quaternion.Euler(currentLevel.rotation);
     }
 
     bool isCorrectPosition()
