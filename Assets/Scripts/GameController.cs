@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    public HotColdDisplay ht_display = null;
     Level currentLevel = null;
     public Menu menu = null;
     public LevelChoice lvlChoice = null;
@@ -87,6 +88,12 @@ public class GameController : MonoBehaviour
     bool isCorrectPosition()
     {
         float angleDiff = Quaternion.Angle(objectHolder.transform.localRotation, Quaternion.Euler(currentLevel.correctRotation));
+
+        if (angleDiff > 100)
+            ht_display.percent = 0;
+        else
+            ht_display.percent = 100 - 100 * Mathf.Abs(angleDiff) / 100;
+
         if (angleDiff < currentLevel.anglePrecision && angleDiff > -currentLevel.anglePrecision)
             return (true);
         return (false);
