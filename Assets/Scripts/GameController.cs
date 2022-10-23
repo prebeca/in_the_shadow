@@ -15,6 +15,8 @@ public class GameController : MonoBehaviour
     public GameObject reStartBtn = null;
     public GameObject quitBtn = null;
 
+    public Animator winAnim = null;
+
     public bool isPlaying = false;
     bool isSnapping = false;
     public int snappingSpeed = 1;
@@ -36,13 +38,13 @@ public class GameController : MonoBehaviour
                 isPlaying = false;
                 isSnapping = false;
                 // call end level menu
-                lvlChoice.winLevel();
+                winAnim.SetTrigger("Win");
+                // lvlChoice.winLevel();
             }
             return;
         }
         if (isCorrectPosition())
         {
-            // end level
             if (timer > 0)
                 timer -= Time.deltaTime;
             else

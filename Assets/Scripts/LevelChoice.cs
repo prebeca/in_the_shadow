@@ -53,6 +53,18 @@ public class LevelChoice : MonoBehaviour
         player.GetComponent<Animator>().SetTrigger("ToMenu");
     }
 
+    public void winLevelMenu()
+    {
+        gameController.isPlaying = false;
+        if (currentIndex + 1 < levels.Count && levels[currentIndex + 1].islocked)
+        {
+            PlayerPrefs.SetInt("LevelUnlock", PlayerPrefs.GetInt("LevelUnlock") + 1);
+            levels[currentIndex + 1].setUnlock();
+        }
+        currentIndex = -1;
+        player.GetComponent<Animator>().SetTrigger("ToMenu");
+    }
+
     public void looseLevel()
     {
         gameController.isPlaying = false;
@@ -80,6 +92,8 @@ public class LevelChoice : MonoBehaviour
 
     public Level getCurrentLvl()
     {
+        if (currentIndex == -1)
+            return null;
         return (levels[currentIndex]);
     }
 

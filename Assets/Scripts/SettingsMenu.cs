@@ -116,17 +116,6 @@ public class SettingsMenu : MonoBehaviour
     public void setFullScreenMode(int modeIndex)
     {
         Screen.fullScreenMode = modes[modeIndex];
-
-        // int currentResIndex = 0;
-
-        // for (int i = 0; i < resolutions.Count; ++i)
-        // {
-        //     if (resolutions[i].width == Screen.currentResolution.width &&
-        //         resolutions[i].height == Screen.currentResolution.height)
-        //         currentResIndex = i;
-        // }
-        // resolutionDropdown.value = currentResIndex;
-        // resolutionDropdown.RefreshShownValue();
     }
 
     public void setVolume(float volume)
